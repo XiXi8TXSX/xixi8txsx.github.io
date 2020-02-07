@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Git入门笔记</title>
+    <url>/posts/502aa6b7/</url>
+    <content><![CDATA[<h1 id="Git入门笔记"><a href="#Git入门笔记" class="headerlink" title="Git入门笔记"></a>Git入门笔记</h1><h2 id="一、什么是Git？？"><a href="#一、什么是Git？？" class="headerlink" title="一、什么是Git？？"></a>一、什么是Git？？</h2><ul>
+<li><p>git</p>
+<p>一个<strong>分布式</strong>的<strong>版本控制系统</strong></p>
+</li>
+<li><p>gitkraken</p>
+<p>一个可视化的git管理工具</p>
+</li>
+<li><p>github</p>
+<p>一个git的远端仓库（同类的还有gitlab、gitee等）</p>
+<a id="more"></a>
+
+<blockquote>
+<p>所以，不要把git和实验室的gitlab混为一谈。git是管理版本的工具，是对于本地代码的管理；而gitlab是一个远端仓库，用于存放git管理的代码。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="二、了解Git"><a href="#二、了解Git" class="headerlink" title="二、了解Git"></a>二、了解Git</h2><p>所以我们现在先抛开远端仓库，用git管理好本地代码先吧！</p>
+<ol>
+<li><p>git的三个区域（空间维度）：</p>
+<ul>
+<li><strong>工作区域（Working Directory）</strong>：也就是平时存放代码的地方</li>
+<li><strong>暂存区域（Stage）</strong>：用于临时存放你的改动，事实上它只是一个文件，保存即将提交的文件列表信息</li>
+<li><strong>Git 仓库（Repository）</strong>：是安全存放数据的位置，这里边有你提交的所有版本的数据。</li>
+</ul>
+<p><em>在本地提交代码基本上就是这三个状态的转换</em></p>
+</li>
+<li><p>git文件的四个状态：</p>
+<ul>
+<li><strong>未跟踪（untracked）</strong>：新文件，没被添加进暂存区过</li>
+<li><strong>已修改（modified）</strong>：对应了在工作区内修改了文件</li>
+<li><strong>已暂存（staged）</strong>：对应了已经把修改的文件提交到暂存区域</li>
+<li><strong>已提交（committed）</strong>：将暂存区域提交到一个新的版本，工作区回归未修改状态</li>
+</ul>
+</li>
+<li><p>git的版本（时间维度）：</p>
+<p><img src="/posts/502aa6b7/2-2-1.png" alt="截取自http://bramus.github.io/ws2-sws-course-materials/xx.git.html"></p>
+<p>每一次commit都会根据提交的内容和人计算出哈希值作为这个commit的id。</p>
+<p><code>HEAD</code>是一个指针，指向当前的状态的commit；<code>HEAD~</code>则是指向上一个commit的指针（如图为1d7a184），<code>HEAD~X</code>则是指向上X个commit的指针。</p>
+</li>
+</ol>
+<h2 id="三、上手Git！"><a href="#三、上手Git！" class="headerlink" title="三、上手Git！"></a>三、上手Git！</h2><ul>
+<li><p><strong>来了老弟</strong></p>
+<p>首先，git为了辨别是谁提交的代码，你必须设置你的username和emial</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;your name&quot;</span><br><span class="line">git config --global user.email &quot;your@email.com&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这仅仅是给git辨别提交代码的身份用，你喜欢设置假的或者用我的名字上传我也一点办法也没有。</p>
+<p>以上代码是设置全局的，如果你只想这个用户名和邮箱只对此工程有效，去掉<code>--global</code>即可。</p>
+<p>然后就可以初始化仓库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+
+<p>至此我们的工程已经进入了由git支配的世界</p>
+</li>
+<li><p><strong>工作区 -&gt; 暂存区</strong></p>
+<p>我们可以用以下命令查看目前版本库的状态：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
+
+<p>顺便插播<code>status</code>的部分选项：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-s（–short）</td>
+<td>以短格式输出</td>
+</tr>
+<tr>
+<td>-b（–branch）</td>
+<td>显示分支和跟踪信息</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>如果你刚刚<code>init</code>了一个git仓库，那么你会发现你的文件处于untrack的状态；</p>
+<p>如果你刚刚修改了某个文件，那么你会发现被修改的文件处于unstage状态；</p>
+<p>此时我们需要用以下命令将这些文件添加到暂存区中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add yourfile</span><br></pre></td></tr></table></figure>
+
+<p>特殊用法：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>git add -A</td>
+<td>提交所有变化</td>
+</tr>
+<tr>
+<td>git add -u</td>
+<td>提交被修改(modified)和被删除(deleted)文件，不包括新文件(new)</td>
+</tr>
+<tr>
+<td>git add .</td>
+<td>提交新文件(new)和被修改(modified)文件，不包括被删除(deleted)文件</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>暂存区 -&gt; Git仓库</strong></p>
+<p>接下来就是提交代码环节了！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git commit -m &quot;your commit message&quot;</span><br></pre></td></tr></table></figure>
+
+<p>但是往往事情没有那么简单，有的人提交了代码后发现，好像落了点什么，不要着急不要回退。将新更改好的版本<code>add</code>到暂存区后，使用以下命令将这次改变合并到之前的commit中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git commit  --amend</span><br></pre></td></tr></table></figure>
+
+<p>如果不需要修改commit message的话，还可以加上<code>--no-edit</code>!</p>
+</li>
+<li><p><strong>查看状态</strong></p>
+<p>如果说上文的<code>status</code>能查看空间维度的状态的话，以下命令就能查看时间维度的状态：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git log</span><br></pre></td></tr></table></figure>
+
+<p><code>log</code>提供了不少的选项，以下列出少许常用的，更多的建议自行搜索：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>–graph</td>
+<td>显示 ASCII 图形表示的分支合并历史。</td>
+</tr>
+<tr>
+<td>–oneline</td>
+<td>只显示提交ID和提交信息的第一行</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>接下来的命令用于找不同：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git diff</span><br></pre></td></tr></table></figure>
+
+<p>以下表格很重要：</p>
+<table>
+<thead>
+<tr>
+<th>比较工作区与上次commit</th>
+<th>比较暂存区和上一次commit</th>
+<th>比较工作区和暂存区</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>git diff</td>
+<td>git diff –cached</td>
+<td>git diff HEAD</td>
+</tr>
+</tbody></table>
+<p>工作区下列命令是对git文件进行删除、重命名：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rm fileA.cpp              # 从git中删除fileA.cpp文件</span><br><span class="line">git mv fileB.cpp fileC.cpp    #将fileB.cpp重命名为fileC.cpp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>暂存修改</strong></p>
+<p>除了commit，我们还可以用如下命令安全的存放你的现在的状态哦</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git stash</span><br></pre></td></tr></table></figure>
+
+<p>用如下命令就可以恢复暂存了</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git stash pop</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h2 id="四、穿越时间"><a href="#四、穿越时间" class="headerlink" title="四、穿越时间"></a>四、穿越时间</h2><p>欲想穿越，就要搞懂分清两个命令<code>reset</code>和<code>checkout</code></p>
+<ul>
+<li><p><strong>reset</strong></p>
+<p>使用如下命令可以将<strong>HEAD分支</strong>移到前一个commit</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset HEAD~</span><br></pre></td></tr></table></figure>
+
+<p>当然也可以把<code>HEAD~</code>替换成你想到达的分支名、commit id！</p>
+<p>注意以下区别：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>git reset –mixed (默认)</td>
+<td>修改版本库、暂存区</td>
+</tr>
+<tr>
+<td>git reset –soft</td>
+<td>修改版本库</td>
+</tr>
+<tr>
+<td>git reset –hard</td>
+<td>修改版本库、暂存区、工作区</td>
+</tr>
+</tbody></table>
+<p>用<code>git log</code>一看，为什么我回到前一个commit之后原来的就消失了！？？</p>
+<p>不着急，我们可以使用以下命令找回你的commit id和HEAD指针！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reflog</span><br></pre></td></tr></table></figure>
+
+<p>而且<code>reset</code>还可以单独修改个别文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset [版本] [文件名或路径]</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p><strong>checkout</strong></p>
+<p>使用如下命令可以把<strong>HEAD指针</strong>移到某个分支</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout [branchname]</span><br></pre></td></tr></table></figure>
+
+<p>当然也可以把分支名替换成HEAD指针、commit id！</p>
+<p>那么，<code>checkout</code>和<code>reset</code>又有什么区别！！？</p>
+<p><img src="/posts/502aa6b7/1033130145-57a48436a5fcd_articlex.png" alt="图片描述"></p>
+<p>最重要的区别在于<code>reset</code>会移动HEAD所指向分支的指向，而<code>checkout</code>只移动HEAD指针本身！</p>
+<p>这样带来了个问题，使用checkout你可以指向一个并没有任何分支指向的commit！此时git便会帮你创建一个<strong>匿名分支</strong>！在匿名分支上的所有操作在你切换到别的分支时会被全部丢弃！</p>
+</li>
+</ul>
+<h2 id="五、分支"><a href="#五、分支" class="headerlink" title="五、分支"></a>五、分支</h2><ul>
+<li><p><strong>你的第一个分支</strong></p>
+<p>使用以下命令查看分支状况：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure>
+
+<p>使用以下命令创建名为develop的分支，并切换到新分支下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch develop      # 创建分支</span><br><span class="line">git checkout develop    # 切换到develop分支下</span><br></pre></td></tr></table></figure>
+
+<p>或者使用下面命令偷懒！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout -b hotfix  # 创建并切换到hotfix分支下</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>merge合并！</strong></p>
+<p>以下命令将develop分支合并到master中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout master    # 首先要切换到master分支！</span><br><span class="line">git merge develop      # 将develop分支merge到master中</span><br></pre></td></tr></table></figure>
+
+<p>要注意的是，使用以上命令，git 会采用默认的 <code>Fast forward</code> 格式进行 <code>merge</code>（因为此时develop分支比master分支新），这样 <code>merge</code> 的这次操作不会有 <code>commit</code> 信息，<code>log</code> 中也不会有分支的图案。我们可以采取 <code>--no-ff</code> 这种方式保留 <code>merge</code> 的 <code>commit</code> 信息：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git merge --no-ff -m &quot;commit message&quot; develop</span><br></pre></td></tr></table></figure>
+
+<p>燃鹅很多时候时期并没有那么简单，更多时候在merge之后便会报告合并出现了冲突！git会在有冲突的文件下作形如以下的标记：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line"># edited in master</span><br><span class="line">=======</span><br><span class="line"># edited in develop</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; deve个itlop</span><br></pre></td></tr></table></figure>
+
+<p>这时，<code># edited in develop</code>和<code># edited in master</code>发生了冲突，当我们手动处理好冲突之后就可以<code>commit</code>代码啦！</p>
+<p>此时，删除develop分支也不会有什么影响啊（仅删除了develop分支的指针）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch -d develop</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>rebase</strong></p>
+<p>文字功底匮乏，请看图！</p>
+<p><img src="/posts/502aa6b7/4-3-1.png" alt="重新划分分支冲突"></p>
+<p><img src="/posts/502aa6b7/4-3-2-1581007874185.png" alt="重新划分分支冲突"></p>
+<p><img src="/posts/502aa6b7/4-3-3.png" alt="重新划分分支冲突"></p>
+<p><img src="/posts/502aa6b7/4-3-4.png" alt="重新划分分支冲突"></p>
+<p>故事是这样的，原本在branch-A的C3基于了C1来开发。突然程序出现了个惊天大bug，情急之下新建了分支branch-B修复了惊天大bug。但是C3当然也想在无惊天大bug的代码下进行开发呀！于是便把分支branch-B<code>rebase</code>到了branch-A中，此时C3<em>（这时的C3已经不是往年的C3，是没有惊天大bug的C3，故加\</em>）已经变成了基于C4开发了！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rebase develop</span><br></pre></td></tr></table></figure>
+
+<p>在处理冲突之后，使用以下命令就可以成功的rebase啦</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rebase --continue</span><br></pre></td></tr></table></figure>
+
+<p><em>注意！rebase会无情修改别人的commit！如图C2、C4</em></p>
+</li>
+</ul>
+<h2 id="六、远端仓库"><a href="#六、远端仓库" class="headerlink" title="六、远端仓库"></a>六、远端仓库</h2><p>查看远端仓库：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote</span><br></pre></td></tr></table></figure>
+
+<p>加上<code>-v</code>可显示需要读写远端仓库使用的 Git 保存的简写与其对应的 URL。</p>
+<p>查看某远端仓库更多信息：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote show [remote-name]</span><br></pre></td></tr></table></figure>
+
+<p>添加远端仓库：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote add [shortname] [url]</span><br></pre></td></tr></table></figure>
+
+<p>克隆远端仓库：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone [url]</span><br></pre></td></tr></table></figure>
+
+<p>从远端仓库中获得数据：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git fetch [remote-name]</span><br></pre></td></tr></table></figure>
+
+<p>如果你有一个分支设置为跟踪一个远端分支，可以使用 <code>git pull</code> 命令来自动的抓取然后合并远端分支到当前分支：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git pull [remote-name]</span><br></pre></td></tr></table></figure>
+
+<p>查看本地分支和远端分支的跟踪关系：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch -vv</span><br></pre></td></tr></table></figure>
+
+<p>推送到远端仓库:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git push [remote-name] [branch-name]</span><br><span class="line"></span><br><span class="line"># 同时创建远端分支方法</span><br><span class="line">git push [remote-name] [branch-name]:[remote-branch-name]</span><br></pre></td></tr></table></figure>
+
+<p>跟踪一个远端分支：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 设置一个已有的本地分支跟踪一个刚刚拉取下来的远端分支</span><br><span class="line">git branch -u [remote-name]/[branch-name]</span><br><span class="line"></span><br><span class="line"># 远端有本地无</span><br><span class="line">git checkout --track [remote-name]/[branch-name]</span><br><span class="line"># 或者</span><br><span class="line">git checkout -b [branch-name] [remote-name]/[branch-name]</span><br></pre></td></tr></table></figure>
+
+<p>远端仓库重命名：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote rename</span><br></pre></td></tr></table></figure>
+
+<p>删除远端仓库：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote rm</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C/C++虚函数实现的基本原理</title>
+    <url>/posts/46122/</url>
+    <content><![CDATA[<h1 id="C-C-虚函数实现的基本原理"><a href="#C-C-虚函数实现的基本原理" class="headerlink" title="C/C++虚函数实现的基本原理"></a>C/C++虚函数实现的基本原理</h1><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>简单地说，每一个含有虚函数（无论是其本身的，还是继承而来的）的类都至少有一个与之对应的虚函数表，其中存放着该类所有的虚函数对应的函数指针。</p>
+<a id="more"></a>
+
+<p>例：<br><img src="/posts/46122/190103092723701.png" alt="img"></p>
+<p>其中：</p>
+<ul>
+<li>B的虚函数表中存放着B::foo和B::bar两个函数指针。</li>
+<li>D的虚函数表中存放的既有继承自B的虚函数B::foo，又有重写（override）了基类虚函数B::bar的D::bar，还有新增的虚函数D::quz。</li>
+</ul>
+<p><em>提示：为了描述方便，本文在探讨对象内存布局时，将忽略内存对齐对布局的影响。</em></p>
+<h2 id="2-虚函数表构造过程"><a href="#2-虚函数表构造过程" class="headerlink" title="2. 虚函数表构造过程"></a>2. 虚函数表构造过程</h2><p>从编译器的角度来说，B的虚函数表很好构造，D的虚函数表构造过程相对复杂。下面给出了构造D的虚函数表的一种方式（仅供参考）：<br><img src="/posts/46122/190103092723702.png" alt="img"></p>
+<p><em>提示：该过程是由编译器完成的，因此也可以说：虚函数替换过程发生在编译时。</em></p>
+<h2 id="3-虚函数调用过程"><a href="#3-虚函数调用过程" class="headerlink" title="3. 虚函数调用过程"></a>3. 虚函数调用过程</h2><p>以下面的程序为例：<br><img src="/posts/46122/190103092723703.png" alt="img"></p>
+<p>编译器只知道pb是B*类型的指针，并不知道它指向的具体对象类型 ：pb可能指向的是B的对象，也可能指向的是D的对象。</p>
+<p>但对于“pb-&gt;bar()”，编译时能够确定的是：此处operator-&gt;的另一个参数是B::bar（因为pb是B*类型的，编译器认为bar是B::bar），而B::bar和D::bar在各自虚函数表中的偏移位置是相等的。</p>
+<p>无论pb指向哪种类型的对象，只要能够确定被调函数在虚函数中的偏移值，待运行时，能够确定具体类型，并能找到相应vptr了，就能找出真正应该调用的函数。</p>
+<p><em>提示：本人曾在“<a href="http://www.cnblogs.com/malecrab/p/5572119.html" target="_blank" rel="noopener">C/C++杂记：深入理解数据成员指针、函数成员指针</a>”一文中提到：虚函数指针中的ptr部分为虚函数表中的偏移值（以字节为单位）加1。</em></p>
+<p>B::bar是一个虚函数指针， 它的ptr部分内容为9，它在B的虚函数表中的偏移值为8（8+1=9）。</p>
+<p>当程序执行到“pb-&gt;bar()”时，已经能够判断pb指向的具体类型了：</p>
+<ul>
+<li>如果pb指向B的对象，可以获取到B对象的vptr，加上偏移值8（(char*)vptr + 8），可以找到B::bar。</li>
+<li>如果pb指向D的对象，可以获取到D对象的vptr，加上偏移值8（(char*)vptr + 8） ，可以找到D::bar。</li>
+<li>如果pb指向其它类型对象…同理…</li>
+</ul>
+<h2 id="4-多重继承"><a href="#4-多重继承" class="headerlink" title="4. 多重继承"></a>4. 多重继承</h2><p>当一个类继承多个类，且多个基类都有虚函数时，子类对象中将包含多个虚函数表的指针（即多个vptr），例：<br><img src="/posts/46122/190103092723704.png" alt="img"></p>
+<p>其中：D自身的虚函数与B基类共用了同一个虚函数表，因此也称B为D的主基类（primary base class）。</p>
+<p>虚函数替换过程与前面描述类似，只是多了一个虚函数表，多了一次拷贝和替换的过程。</p>
+<p>虚函数的调用过程，与前面描述基本类似，区别在于基类指针指向的位置可能不是派生类对象的起始位置，以如下面的程序为例：<br><img src="/posts/46122/190103092723705.png" alt="img"></p>
+<h2 id="5-菱形继承"><a href="#5-菱形继承" class="headerlink" title="5. 菱形继承"></a>5. 菱形继承</h2><p>本文不讨论菱形继承的情形，个人觉得：菱形继承的复杂度远大于它的使用价值，这也是C++让人又爱又恨的原因之一。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.linuxidc.com/Linux/2019-01/156152.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2019-01/156152.htm</a></p>
+]]></content>
+      <categories>
+        <category>c++</category>
+      </categories>
+      <tags>
+        <tag>c++</tag>
+        <tag>虚函数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu安装cuda和cudnn</title>
+    <url>/posts/9882/</url>
+    <content><![CDATA[<h1 id="ubuntu安装cuda和cudnn"><a href="#ubuntu安装cuda和cudnn" class="headerlink" title="ubuntu安装cuda和cudnn"></a>ubuntu安装cuda和cudnn</h1><a id="more"></a>
+
+<h2 id="一、CUDA"><a href="#一、CUDA" class="headerlink" title="一、CUDA"></a>一、CUDA</h2><p><strong>1. 下载cuda</strong></p>
+<p>   <a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener">cuda下载地址</a></p>
+<p>   或者直接终端下载：</p>
+   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run</span><br><span class="line">sudo sh cuda_10.1.243_418.87.00_linux.run</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 安装</strong></p>
+<p>   cuda8.0后就集成了nvidia显卡驱动，cuda安装可分为</p>
+<ul>
+<li><p>不带驱动安装</p>
+</li>
+<li><p>带驱动安装</p>
+<p>以下为不带驱动安装：  </p>
+</li>
+</ul>
+<p><img src="/posts/9882/20190703223712283.png" alt="img">  </p>
+<p>输入accept </p>
+<p>  <img src="/posts/9882/20190703224837983.png" alt="img">  </p>
+<p>不选择Driver</p>
+<p><strong>3. 设置cuda环境变量</strong></p>
+<p>   <code>sudo gedit ~/.bashrc</code></p>
+<p>   在里面添加：</p>
+   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64</span><br><span class="line">export PATH=$PATH:/usr/local/cuda-10.1/bin</span><br><span class="line">export CUDA_HOME=$CUDA_HOME:/usr/local/cuda-10.1</span><br></pre></td></tr></table></figure>
+
+<p>   ==目录要根据实际安装版本而定==</p>
+<p>   <code>source ~/.bashrc</code></p>
+<p><strong>4. 检查是否安装成功</strong></p>
+<p>   <code>nvcc --version</code></p>
+<p>   <img src="/posts/9882/20190703231011626.png" alt="img"></p>
+<hr>
+<h2 id="二、CUDNN"><a href="#二、CUDNN" class="headerlink" title="二、CUDNN"></a>二、CUDNN</h2><ol>
+<li><p>下载cudnn</p>
+<p><a href="https://developer.nvidia.com/rdp/cudnn-archive" target="_blank" rel="noopener">cudnn下载地址</a></p>
+</li>
+<li><p>安装</p>
+<ul>
+<li><p>deb安装</p>
+<p><img src="/posts/9882/20190704003428733.png" alt="img"></p>
+<p>下载如图三个文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo dpkg -i libcudnn7_7.0.3.11-1+cuda9.0_amd64.deb</span><br><span class="line">sudo dpkg -i libcudnn7-dev_7.0.3.11-1+cuda9.0_amd64.deb</span><br><span class="line">sudo dpkg -i libcudnn7-doc_7.0.3.11-1+cuda9.0_amd64.deb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>tgz安装</p>
+<p>解压下载文件</p>
+<p>终端进入解压出来的文件目录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo cp cuda/include/cudnn.h /usr/local/cuda/include/</span><br><span class="line">sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64/</span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn.h</span><br><span class="line">sudo chmod a+r /usr/local/cuda/lib64/libcudnn*</span><br></pre></td></tr></table></figure>
+
+<p>（拷贝库和同文件并给予权限）</p>
+</li>
+</ul>
+</li>
+<li><p>检查安装是否成功</p>
+<p>   <code>cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A 2</code></p>
+</li>
+</ol>
+<hr>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/sss_369/article/details/94591280" target="_blank" rel="noopener">https://blog.csdn.net/sss_369/article/details/94591280</a></p>
+<p><a href="https://blog.csdn.net/sss_369/article/details/94592268" target="_blank" rel="noopener">https://blog.csdn.net/sss_369/article/details/94592268</a></p>
+]]></content>
+      <categories>
+        <category>ubuntu安装</category>
+      </categories>
+      <tags>
+        <tag>cuda</tag>
+        <tag>安装</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu安装opencv4</title>
+    <url>/posts/45726/</url>
+    <content><![CDATA[<h1 id="ubuntu安装opencv4"><a href="#ubuntu安装opencv4" class="headerlink" title="ubuntu安装opencv4"></a>ubuntu安装opencv4</h1><a id="more"></a>
+
+<h2 id="一、下载"><a href="#一、下载" class="headerlink" title="一、下载"></a>一、下载</h2><ol>
+<li><p>下载opencv以及contrib库</p>
+<p><code>git clone https://github.com/opencv/opencv.git</code></p>
+<p><code>git clone https://github.com/opencv/opencv_contrib.git</code></p>
+</li>
+<li><p>安装依赖项</p>
+<p><code>sudo apt-get install build-essential</code></p>
+<p><code>sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev</code></p>
+<p><code>sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev</code></p>
+</li>
+<li><p>安装cuda和cudnn</p>
+</li>
+<li><p>安装cmake-gui</p>
+<p><code>sudo apt-get install cmake-qt-gui</code></p>
+</li>
+</ol>
+<h2 id="二、cmake编译安装opencv"><a href="#二、cmake编译安装opencv" class="headerlink" title="二、cmake编译安装opencv"></a>二、cmake编译安装opencv</h2><p><strong>1. CMAKE</strong></p>
+<p>打开cmake-gui</p>
+<p>Where is the source code：填写opencv源代码目录</p>
+<p>Where is build the binaries：在opencv源代码目录内新建一build文件（外部构建）</p>
+<p><img src="/posts/45726/2019-11-09%2016-22-35%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt></p>
+<ul>
+<li><p>点击configure</p>
+<ul>
+<li><p>设置：</p>
+<p>CMAKE_BUILD_TYPE=Release</p>
+<p>OPENCV_ENABLE_NONFREE=ON</p>
+<p>OPENCV_GENERATE_PKGCONFIG=ON</p>
+</li>
+<li><p>设置contrib库</p>
+<p>OPENCV_EXTRA_MODULES_PATH=/home/…/opencv_contrib/modules</p>
+<p>设置到contrib库源代码内的modules文件夹</p>
+</li>
+<li><p>设置安装目录</p>
+<p> CMAKE_INSTALL_PREFIX=/usr/local/opencv4</p>
+<p>默认路径为/usr/local</p>
+<p>为安装多版本opencv建议自定义一个目录</p>
+</li>
+<li><p>CUDA（选）</p>
+<p>勾选cuda选项</p>
+</li>
+<li><p>点击Generate</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. 编译安装</strong></p>
+<p>终端进入build目录</p>
+<p><code>make -j4</code></p>
+<p>-j4为四个线程编译</p>
+<p><code>sudo make install</code></p>
+<p>如果安装了python-dev，这时Python应该可以使用OpenCV了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">$ python </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> cv2</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cv2.__version__</span><br><span class="line"><span class="string">'4.0.1'</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>3. 配置opencv</strong></p>
+<ul>
+<li><p>让系统在opencv安装目录中搜索动态库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd /etc/ld.so.conf.d/</span><br><span class="line">sudo touch opencv4.conf</span><br><span class="line">sudo sh -c &apos;echo &quot;/usr/local/opencv4/lib&quot; &gt; opencv4.conf&apos;</span><br></pre></td></tr></table></figure>
+
+<p>==注意：echo “/usr/local/opencv4/lib” 为opencv安装目录==</p>
+</li>
+</ul>
+<p>​        更新pkg-config：</p>
+<p>​        <code>sudo ldconfig</code></p>
+<ul>
+<li><p>设置bash：</p>
+<p><code>sudo gedit /etc/bash.bashrc</code></p>
+<p>在末尾追加：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opencv4/lib/pkgconfig  </span><br><span class="line">export PKG_CONFIG_PATH</span><br></pre></td></tr></table></figure>
+
+<p>==注意上面的路径为安装路径！！！==</p>
+<p>保存，执行如下命令使得配置生效：</p>
+<p><code>source /etc/bash.bashrc</code></p>
+<p>查看opencv版本：</p>
+<p><code>pkg-config --modversion opencv</code></p>
+</li>
+</ul>
+<p>opencv安装完成！！</p>
+<h2 id="三、测试"><a href="#三、测试" class="headerlink" title="三、测试"></a>三、测试</h2><ul>
+<li><p>opencv测试</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/xfeatures2d.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv::xfeatures2d;         <span class="comment">// 不要忘了导入扩展模块</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"> </span><br><span class="line">Mat src_img, gray_img;</span><br><span class="line"><span class="keyword">const</span> <span class="built_in">string</span> output_name = <span class="string">"SURF特征检测"</span>;</span><br><span class="line"><span class="keyword">int</span> minHessian = <span class="number">100</span>;                <span class="comment">// 定义SURF中的hessian阈值特征点检测算子</span></span><br><span class="line"><span class="keyword">int</span> max_value = <span class="number">500</span>;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SURF_detect_func</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">void</span> *)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// SURF特征检测</span></span><br><span class="line">	Ptr&lt;SURF&gt; detector = SURF::create(minHessian);</span><br><span class="line">	<span class="built_in">vector</span>&lt;KeyPoint&gt; keypoints;</span><br><span class="line">	detector-&gt;detect(gray_img, keypoints, Mat());      <span class="comment">// 检测src_img图像中的SURF特征</span></span><br><span class="line">  <span class="comment">// 绘制关键点</span></span><br><span class="line">	Mat keypoint_img;</span><br><span class="line">	dracmakelists:wKeypoints(gray_img, keypoints, keypoint_img, Scalar::all(<span class="number">-1</span>), DrawMatchesFlags::<span class="literal">DEFAULT</span>);  <span class="comment">// Scalar::all(-1)这是一种技巧，就是当用一个负数作为关键点颜色，表示每次随机选取颜色。</span></span><br><span class="line">	imshow(output_name, keypoint_img);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	src_img = imread(<span class="string">"1.png"</span>);</span><br><span class="line">	<span class="keyword">if</span> (src_img.empty())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"could not load the image...\n"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	namedWindow(<span class="string">"原图"</span>, WINDOW_AUTOSIZE);</span><br><span class="line">	imshow(<span class="string">"原图"</span>, src_img);</span><br><span class="line">	cvtColor(src_img, gray_img, COLOR_BGR2GRAY);</span><br><span class="line">	namedWindow(output_name, WINDOW_AUTOSIZE);</span><br><span class="line">	createTrackbar(<span class="string">"hessian阈值"</span>, output_name,&amp;minHessian, max_value, SURF_detect_func);</span><br><span class="line">	SURF_detect_func(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line"> </span><br><span class="line">	waitKey(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CMakeLists.txt:</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 声明要求的 cmake 最低版本</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>( VERSION <span class="number">2.8</span> )</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 声明一个 cmake 工程</span></span><br><span class="line"><span class="keyword">project</span>( opencv_test )</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 设置编译模式</span></span><br><span class="line"><span class="keyword">set</span>( CMAKE_BUILD_TYPE <span class="string">"Debug"</span> )</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS   <span class="string">"-std=c++11"</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">find_package</span>(OpenCV <span class="number">4.1</span> REQUIRED)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 添加一个可执行程序</span></span><br><span class="line"><span class="comment"># 语法：add_executable( 程序名 源代码文件 ）</span></span><br><span class="line"><span class="keyword">add_executable</span>( <span class="keyword">test</span> surf.cpp )</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 将库文件链接到可执行程序上</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>( <span class="keyword">test</span> <span class="variable">$&#123;OpenCV_LIBS&#125;</span> )</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>cuda测试</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/version.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/cudaarithm.hpp&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">///　读取图片</span></span><br><span class="line">        cv::Mat src_host = cv::imread(<span class="string">"1.jpg"</span>, cv::IMREAD_GRAYSCALE);</span><br><span class="line">        <span class="comment">/// 定义GpuMat</span></span><br><span class="line">        cv::cuda::GpuMat dst, src;</span><br><span class="line">        <span class="comment">/// 将主机内存的图像数据上传到GPU内存</span></span><br><span class="line">        src.upload(src_host);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/// 调用GPU的阈值函数(很多使用GPU加速的函数都和CPU版本的函数相同)</span></span><br><span class="line">        cv::cuda::threshold(src, dst, <span class="number">120</span>, <span class="number">255</span>, cv::THRESH_BINARY);</span><br><span class="line"> </span><br><span class="line">        cv::Mat result_host;</span><br><span class="line">        <span class="comment">/// 从GPU上下载阈值化完成的图片</span></span><br><span class="line">        dst.download(result_host);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/// 显示</span></span><br><span class="line">        cv::imshow(<span class="string">"Result"</span>, result_host);</span><br><span class="line">        cv::waitKey();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span>(<span class="keyword">const</span> cv::Exception&amp; ex)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Error: "</span> &lt;&lt; ex.what() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CMakeLists.txt:</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">project</span>(cuda_test)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">set</span>(CUDA_USE_STATIC_CUDA_RUNTIME <span class="keyword">ON</span>) <span class="comment">#这一句解决 cannot find -lopencv_dep_cudart</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_RUNTIME_OUTPUT_DIRECTORY <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">find_package</span>(CUDA REQUIRED)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">"CUDA版本: $&#123;CUDA_VERSION&#125;"</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">"    头文件目录：$&#123;CUDA_INCLUDE_DIRS&#125;"</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">"    库文件列表：$&#123;CUDA_LIBRARIES&#125;"</span>)</span><br><span class="line"><span class="keyword">set</span>(CUDA_NVCC_FLAGS -G;-g;-std=c++<span class="number">11</span>) <span class="comment"># nvcc flags</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;CUDA_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">set</span>(OpenCV_DIR <span class="string">"/usr/local/share/OpenCV"</span>) <span class="comment"># 指定OpenCV安装路径来区分不同的OpenCV版本</span></span><br><span class="line"><span class="keyword">find_package</span>(OpenCV REQUIRED)</span><br><span class="line"><span class="keyword">set</span>(OpenCV_LIB_DIR <span class="variable">$&#123;OpenCV_INSTALL_PATH&#125;</span>/lib)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">"OpenCV版本: $&#123;OpenCV_VERSION&#125;"</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">"    头文件目录：$&#123;OpenCV_INCLUDE_DIRS&#125;"</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">"    库文件目录：$&#123;OpenCV_LIB_DIR&#125;"</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">"    库文件列表：$&#123;OpenCV_LIBS&#125;"</span>)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"><span class="keyword">link_directories</span>(<span class="variable">$&#123;OpenCV_LIB_DIR&#125;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">CUDA_ADD_EXECUTABLE(main main.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(main <span class="variable">$&#123;OpenCV_LIBS&#125;</span> <span class="variable">$&#123;CUDA_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/sss_369/article/details/94755824" target="_blank" rel="noopener">https://blog.csdn.net/sss_369/article/details/94755824</a></p>
+]]></content>
+      <categories>
+        <category>ubuntu安装</category>
+      </categories>
+      <tags>
+        <tag>安装</tag>
+        <tag>opencv</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>markdown基本语法</title>
+    <url>/posts/8530/</url>
+    <content><![CDATA[<h1 id="markdown基本语法"><a href="#markdown基本语法" class="headerlink" title="markdown基本语法"></a>markdown基本语法</h1><p>Markdown是一种纯文本格式的标记语言。通过简单的标记语法，它可以使普通文本内容具有一定的格式。</p>
+<a id="more"></a>
+
+<h2 id="一、标题"><a href="#一、标题" class="headerlink" title="一、标题"></a>一、标题</h2><p>在想要设置为标题的文字前面加#来表示<br>一个#是一级标题，二个#是二级标题，以此类推。支持六级标题。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># 这是一级标题</span></span><br><span class="line"><span class="section">## 这是二级标题</span></span><br><span class="line"><span class="section">### 这是三级标题</span></span><br><span class="line"><span class="section">#### 这是四级标题</span></span><br><span class="line"><span class="section">##### 这是五级标题</span></span><br><span class="line"><span class="section">###### 这是六级标题</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="二、字体"><a href="#二、字体" class="headerlink" title="二、字体"></a>二、字体</h2><ul>
+<li><p><strong>加粗</strong></p>
+<p>左右分别用两个*号包起来</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="strong">**加粗文字**</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>斜体</strong></p>
+<p>左右分别用一个*号包起来</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="emphasis">*斜体文字*</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>斜体加粗</strong></p>
+<p>左右分别用三个*号包起来</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="strong">***斜体加粗**</span>*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>删除线</strong></p>
+<p>左右分别用两个~包起来</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">~~删除线~~</span><br></pre></td></tr></table></figure>
+<p><strong>Typora 快捷键：</strong></p>
+<p>粗体: Ctrl+B</p>
+<p>斜体: Ctrl+I</p>
+<p>下划线: Ctrl+U</p>
+<p>删除线: Alt+Shift+5</p>
+</li>
+</ul>
+<hr>
+<h2 id="三、引用"><a href="#三、引用" class="headerlink" title="三、引用"></a>三、引用</h2><p>在引用的文字前加&gt;即可。引用也可以嵌套，如加两个&gt;&gt;三个&gt;&gt;&gt;</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&gt;一级引用</span><br><span class="line">&gt;&gt;二级引用</span><br><span class="line">&gt;&gt;&gt;&gt;多级引用</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<p>引用</p>
+</blockquote>
+<p><strong>Typora 快捷键：</strong> Ctrl+Shift+Q</p>
+<hr>
+<h2 id="四、分割线"><a href="#四、分割线" class="headerlink" title="四、分割线"></a>四、分割线</h2><p>三个或者三个以上的 - 或者 * 都可以。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">----</span><br><span class="line"><span class="emphasis">***</span></span><br><span class="line"><span class="emphasis">***</span>*</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="五、图片"><a href="#五、图片" class="headerlink" title="五、图片"></a>五、图片</h2><p>语法：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">图片下方显示文字</span>](<span class="link">图片地址 "图片title"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">baidu百度</span>](<span class="link">https://www.baidu.com/img/bd_logo1.png "百度图标"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<p><img src="https://www.baidu.com/img/bd_logo1.png" alt="baidu百度" title="百度图标"></p>
+<p><strong>Typora快捷键：</strong> Ctrl+Shift+I</p>
+<hr>
+<h2 id="六、超链接"><a href="#六、超链接" class="headerlink" title="六、超链接"></a>六、超链接</h2><p>语法：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">[<span class="string">超链接名</span>](<span class="link">超链接地址 "超链接title"</span>)</span><br><span class="line"></span><br><span class="line">title可有可无</span><br></pre></td></tr></table></figure>
+
+<p><strong>Typora快捷键：</strong> Ctrl+K</p>
+<hr>
+<h2 id="七、列表"><a href="#七、列表" class="headerlink" title="七、列表"></a>七、列表</h2><ul>
+<li><p><strong>无序列表</strong></p>
+<p>语法：</p>
+<p>无序列表用 - + * 任何一种都可以</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">- </span>无序列表</span><br><span class="line"><span class="bullet">+ </span>无序列表</span><br><span class="line"><span class="bullet">* </span>无序列表</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>有序列表</strong></p>
+<p>语法：</p>
+<p>数字加点</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1. </span>有序列表</span><br><span class="line"><span class="bullet">2. </span>有序列表</span><br><span class="line"><span class="bullet">3. </span>序号跟内容间要有空格</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>列表嵌套</strong></p>
+<p>语法：</p>
+<p>上一级与下一级之间打三个空格</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">+ </span>一级无序</span><br><span class="line"><span class="bullet">   1. </span>二级有序</span><br><span class="line"><span class="bullet">   2. </span>二级有序</span><br><span class="line"><span class="bullet">+ </span>一级无序</span><br><span class="line"><span class="bullet">   + </span>二级无序</span><br><span class="line"><span class="bullet">   + </span>二级无序</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<hr>
+<h2 id="八、表格"><a href="#八、表格" class="headerlink" title="八、表格"></a>八、表格</h2><p>语法：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">表头|表头|表头</span><br><span class="line">---|:--:|--:</span><br><span class="line">内容|居中|居右|</span><br><span class="line"></span><br><span class="line">第二行分割表头和内容，-有一个就行，可多加对齐</span><br><span class="line">文字默认居左</span><br><span class="line">文字居中：-两边加：</span><br><span class="line">文字居右：-右边加：</span><br><span class="line"></span><br><span class="line">注：原生的语法两边都要用 | 包起来。</span><br></pre></td></tr></table></figure>
+
+<p><strong>Typora 快捷键：</strong> Ctrl+T</p>
+<hr>
+<h2 id="九、代码"><a href="#九、代码" class="headerlink" title="九、代码"></a>九、代码</h2><p><strong>单行代码：</strong></p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="code">`代码内容`</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>代码块：</strong></p>
+<p>代码之间分别用三个反引号包起来，且两边的反引号单独占一行</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">(<span class="code">```</span>)</span><br><span class="line">代码内容</span><br><span class="line">(<span class="code">```</span>)(没有括号，防转译)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Typora 快捷键：</strong></p>
+<p>行内代码: Ctrl+Shift+`</p>
+<p>多行代码: Ctrl+Shift+K</p>
+<hr>
+<h2 id="十、公式"><a href="#十、公式" class="headerlink" title="十、公式"></a>十、公式</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">$$</span><br><span class="line">x+y=z</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+
+<p>$$<br>x+y=z<br>$$</p>
+<p><strong>Typora 快捷键：</strong> Ctrl+Shift+M</p>
+<hr>
+<h2 id="十一、流程图"><a href="#十一、流程图" class="headerlink" title="十一、流程图"></a>十一、流程图</h2><p>示例：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">​<span class="code">```</span>flow</span><br><span class="line">st=&gt;start: 开始</span><br><span class="line">op=&gt;operation: My Operation</span><br><span class="line">cond=&gt;condition: Yes or No?</span><br><span class="line">e=&gt;end</span><br><span class="line">st-&gt;op-&gt;cond</span><br><span class="line">cond(yes)-&gt;e</span><br><span class="line">cond(no)-&gt;op</span><br><span class="line">&amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">效果：</span><br><span class="line"></span><br><span class="line">​```flow</span><br><span class="line">st=&gt;start: start</span><br><span class="line">op=&gt;operation: My Operation</span><br><span class="line">cond=&gt;condition: Yes or No?</span><br><span class="line">e=&gt;end</span><br><span class="line">st-&gt;op-&gt;cond</span><br><span class="line">cond(yes)-&gt;e</span><br><span class="line">cond(no)-&gt;op</span><br><span class="line">&amp;</span><br></pre></td></tr></table></figure>
+<p>```</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo常用命令</title>
+    <url>/posts/15928/</url>
+    <content><![CDATA[<h1 id="Hexo常用命令"><a href="#Hexo常用命令" class="headerlink" title="Hexo常用命令"></a>Hexo常用命令</h1><p>Hexo 框架可以帮助我们快速创建一个属于自己的博客网站，熟悉 Hexo 框架提供的命令有利于我们管理博客。</p>
+<a id="more"></a>
+
+<h2 id="1、hexo-init"><a href="#1、hexo-init" class="headerlink" title="1、hexo init"></a>1、hexo init</h2><p><code>hexo init</code> 命令用于初始化本地文件夹为网站的根目录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo init [folder]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>folder</code> 可选参数，用以指定初始化目录的路径，若无指定则默认为当前目录</li>
+</ul>
+<h2 id="2、hexo-new"><a href="#2、hexo-new" class="headerlink" title="2、hexo new"></a>2、hexo new</h2><p><code>·hexo new</code> 命令用于新建文章，一般可以简写为 <code>hexo n</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>layout</code> 可选参数，用以指定文章类型，若无指定则默认由配置文件中的 default_layout 选项决定</li>
+<li><code>title</code> 必填参数，用以指定文章标题，如果参数值中含有空格，则需要使用双引号包围</li>
+</ul>
+<h2 id="3、hexo-generate"><a href="#3、hexo-generate" class="headerlink" title="3、hexo generate"></a>3、hexo generate</h2><p><code>hexo generate</code> 命令用于生成静态文件，一般可以简写为 <code>hexo g</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-d</code> 选项，指定生成后部署，与 <code>hexo d -g</code> 等价</li>
+</ul>
+<h2 id="4、hexo-server"><a href="#4、hexo-server" class="headerlink" title="4、hexo server"></a>4、hexo server</h2><p><code>hexo server</code> 命令用于启动本地服务器，一般可以简写为 <code>hexo s</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-p</code> 选项，指定服务器端口，默认为 4000</li>
+<li><code>-i</code> 选项，指定服务器 IP 地址，默认为 0.0.0.0</li>
+<li><code>-s</code> 选项，静态模式 ，仅提供 public 文件夹中的文件并禁用文件监视</li>
+</ul>
+<p><strong>说明</strong> ：运行服务器前需要安装 hexo-server 插件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-server --save</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5、hexo-deploy"><a href="#5、hexo-deploy" class="headerlink" title="5、hexo deploy"></a>5、hexo deploy</h2><p><code>hexo deploy</code> 命令用于部署网站，一般可以简写为 <code>hexo d</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-g</code> 选项，指定生成后部署，与 <code>hexo g -d</code> 等价</li>
+</ul>
+<p><strong>说明</strong> ：部署前需要修改<strong>_config.yml</strong>配置文件，下面以 git 为例进行说明</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">	type: git</span><br><span class="line">	repo: &lt;repository url&gt;</span><br><span class="line">	branch:	master</span><br><span class="line">	message: 自定义提交消息，默认为Site updated: &#123;&#123; now(&apos;YYYY-MM-DD HH:mm:ss&apos;) &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6、hexo-clean"><a href="#6、hexo-clean" class="headerlink" title="6、hexo clean"></a>6、hexo clean</h2><p><code>hexo clean</code> 命令用于清理缓存文件，是一个比较常用的命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure>
+
+<p><strong>网站显示异常时可尝试此操作</strong></p>
+<h2 id="7、Option"><a href="#7、Option" class="headerlink" title="7、Option"></a>7、Option</h2><h3 id="（1）hexo-–safe"><a href="#（1）hexo-–safe" class="headerlink" title="（1）hexo –safe"></a>（1）hexo –safe</h3><p><code>hexo --safe</code> 表示安全模式，用于禁用加载插件和脚本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo --safe</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装新插件时遇到问题可尝试此操作</strong></p>
+<h3 id="（2）hexo-–debug"><a href="#（2）hexo-–debug" class="headerlink" title="（2）hexo –debug"></a>（2）hexo –debug</h3><p><code>hexo --debug</code> 表示调试模式，用于将消息详细记录到终端和 <code>debug.log</code> 文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo --debug</span><br></pre></td></tr></table></figure>
+
+<h3 id="（3）hexo-–silent"><a href="#（3）hexo-–silent" class="headerlink" title="（3）hexo –silent"></a>（3）hexo –silent</h3><p><code>hexo --silent</code> 表示静默模式，用于静默输出到终端</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo --silent</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/wsmrzx/article/details/81478103" target="_blank" rel="noopener">https://blog.csdn.net/wsmrzx/article/details/81478103</a></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>common</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/posts/16107/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<a id="more"></a>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+</search>
