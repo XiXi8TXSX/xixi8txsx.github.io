@@ -68,11 +68,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>-s（–short）</td>
+<td><code>-s</code>（<code>--short</code>）</td>
 <td>以短格式输出</td>
 </tr>
 <tr>
-<td>-b（–branch）</td>
+<td><code>-b</code>（<code>--branch</code>）</td>
 <td>显示分支和跟踪信息</td>
 </tr>
 <tr>
@@ -94,15 +94,15 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>git add -A</td>
+<td><code>git add -A</code></td>
 <td>提交所有变化</td>
 </tr>
 <tr>
-<td>git add -u</td>
+<td><code>git add -u</code></td>
 <td>提交被修改(modified)和被删除(deleted)文件，不包括新文件(new)</td>
 </tr>
 <tr>
-<td>git add .</td>
+<td><code>git add .</code></td>
 <td>提交新文件(new)和被修改(modified)文件，不包括被删除(deleted)文件</td>
 </tr>
 </tbody></table>
@@ -129,11 +129,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>–graph</td>
+<td><code>--graph</code></td>
 <td>显示 ASCII 图形表示的分支合并历史。</td>
 </tr>
 <tr>
-<td>–oneline</td>
+<td><code>--oneline</code></td>
 <td>只显示提交ID和提交信息的第一行</td>
 </tr>
 <tr>
@@ -154,9 +154,9 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>git diff</td>
-<td>git diff –cached</td>
-<td>git diff HEAD</td>
+<td><code>git diff</code></td>
+<td><code>git diff --cached</code></td>
+<td><code>git diff HEAD</code></td>
 </tr>
 </tbody></table>
 <p>工作区下列命令是对git文件进行删除、重命名：</p>
@@ -189,15 +189,15 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>git reset –mixed (默认)</td>
+<td><code>git reset --mixed</code> (默认)</td>
 <td>修改版本库、暂存区</td>
 </tr>
 <tr>
-<td>git reset –soft</td>
+<td><code>git reset --soft</code></td>
 <td>修改版本库</td>
 </tr>
 <tr>
-<td>git reset –hard</td>
+<td><code>git reset --hard</code></td>
 <td>修改版本库、暂存区、工作区</td>
 </tr>
 </tbody></table>
@@ -243,7 +243,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git merge --no-ff -m &quot;commit message&quot; develop</span><br></pre></td></tr></table></figure>
 
 <p>燃鹅很多时候时期并没有那么简单，更多时候在merge之后便会报告合并出现了冲突！git会在有冲突的文件下作形如以下的标记：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line"># edited in master</span><br><span class="line">=======</span><br><span class="line"># edited in develop</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; deve个itlop</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line"># edited in master</span><br><span class="line">=======</span><br><span class="line"># edited in develop</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; develop</span><br></pre></td></tr></table></figure>
 
 <p>这时，<code># edited in develop</code>和<code># edited in master</code>发生了冲突，当我们手动处理好冲突之后就可以<code>commit</code>代码啦！</p>
 <p>此时，删除develop分支也不会有什么影响啊（仅删除了develop分支的指针）：</p>
