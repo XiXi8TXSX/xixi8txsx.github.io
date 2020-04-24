@@ -348,76 +348,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ubuntu安装cuda和cudnn</title>
-    <url>/posts/9882/</url>
-    <content><![CDATA[<h1 id="ubuntu安装cuda和cudnn"><a href="#ubuntu安装cuda和cudnn" class="headerlink" title="ubuntu安装cuda和cudnn"></a>ubuntu安装cuda和cudnn</h1><a id="more"></a>
-
-<h2 id="一、CUDA"><a href="#一、CUDA" class="headerlink" title="一、CUDA"></a>一、CUDA</h2><p><strong>1. 下载cuda</strong></p>
-<p>   <a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener">cuda下载地址</a></p>
-<p>   或者直接终端下载：</p>
-   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run</span><br><span class="line">sudo sh cuda_10.1.243_418.87.00_linux.run</span><br></pre></td></tr></table></figure>
-
-<p><strong>2. 安装</strong></p>
-<p>   cuda8.0后就集成了nvidia显卡驱动，cuda安装可分为</p>
-<ul>
-<li><p>不带驱动安装</p>
-</li>
-<li><p>带驱动安装</p>
-<p>以下为不带驱动安装：  </p>
-</li>
-</ul>
-<p><img src="/posts/9882/20190703223712283.png" alt="img">  </p>
-<p>输入accept </p>
-<p>  <img src="/posts/9882/20190703224837983.png" alt="img">  </p>
-<p>不选择Driver</p>
-<p><strong>3. 设置cuda环境变量</strong></p>
-<p>   <code>sudo gedit ~/.bashrc</code></p>
-<p>   在里面添加：</p>
-   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64</span><br><span class="line">export PATH=$PATH:/usr/local/cuda-10.1/bin</span><br><span class="line">export CUDA_HOME=$CUDA_HOME:/usr/local/cuda-10.1</span><br></pre></td></tr></table></figure>
-
-<p>   ==目录要根据实际安装版本而定==</p>
-<p>   <code>source ~/.bashrc</code></p>
-<p><strong>4. 检查是否安装成功</strong></p>
-<p>   <code>nvcc --version</code></p>
-<p>   <img src="/posts/9882/20190703231011626.png" alt="img"></p>
-<hr>
-<h2 id="二、CUDNN"><a href="#二、CUDNN" class="headerlink" title="二、CUDNN"></a>二、CUDNN</h2><ol>
-<li><p>下载cudnn</p>
-<p><a href="https://developer.nvidia.com/rdp/cudnn-archive" target="_blank" rel="noopener">cudnn下载地址</a></p>
-</li>
-<li><p>安装</p>
-<ul>
-<li><p>deb安装</p>
-<p><img src="/posts/9882/20190704003428733.png" alt="img"></p>
-<p>下载如图三个文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo dpkg -i libcudnn7_7.0.3.11-1+cuda9.0_amd64.deb</span><br><span class="line">sudo dpkg -i libcudnn7-dev_7.0.3.11-1+cuda9.0_amd64.deb</span><br><span class="line">sudo dpkg -i libcudnn7-doc_7.0.3.11-1+cuda9.0_amd64.deb</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>tgz安装</p>
-<p>解压下载文件</p>
-<p>终端进入解压出来的文件目录</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo cp cuda/include/cudnn.h /usr/local/cuda/include/</span><br><span class="line">sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64/</span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn.h</span><br><span class="line">sudo chmod a+r /usr/local/cuda/lib64/libcudnn*</span><br></pre></td></tr></table></figure>
-
-<p>（拷贝库和同文件并给予权限）</p>
-</li>
-</ul>
-</li>
-<li><p>检查安装是否成功</p>
-<p>   <code>cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A 2</code></p>
-</li>
-</ol>
-<hr>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/sss_369/article/details/94591280" target="_blank" rel="noopener">https://blog.csdn.net/sss_369/article/details/94591280</a></p>
-<p><a href="https://blog.csdn.net/sss_369/article/details/94592268" target="_blank" rel="noopener">https://blog.csdn.net/sss_369/article/details/94592268</a></p>
-]]></content>
-      <categories>
-        <category>ubuntu安装</category>
-      </categories>
-      <tags>
-        <tag>cuda</tag>
-        <tag>安装</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ubuntu安装opencv4</title>
     <url>/posts/45726/</url>
     <content><![CDATA[<h1 id="ubuntu安装opencv4"><a href="#ubuntu安装opencv4" class="headerlink" title="ubuntu安装opencv4"></a>ubuntu安装opencv4</h1><a id="more"></a>
@@ -530,8 +460,78 @@
         <category>ubuntu安装</category>
       </categories>
       <tags>
-        <tag>安装</tag>
         <tag>opencv</tag>
+        <tag>安装</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu安装cuda和cudnn</title>
+    <url>/posts/9882/</url>
+    <content><![CDATA[<h1 id="ubuntu安装cuda和cudnn"><a href="#ubuntu安装cuda和cudnn" class="headerlink" title="ubuntu安装cuda和cudnn"></a>ubuntu安装cuda和cudnn</h1><a id="more"></a>
+
+<h2 id="一、CUDA"><a href="#一、CUDA" class="headerlink" title="一、CUDA"></a>一、CUDA</h2><p><strong>1. 下载cuda</strong></p>
+<p>   <a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener">cuda下载地址</a></p>
+<p>   或者直接终端下载：</p>
+   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run</span><br><span class="line">sudo sh cuda_10.1.243_418.87.00_linux.run</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 安装</strong></p>
+<p>   cuda8.0后就集成了nvidia显卡驱动，cuda安装可分为</p>
+<ul>
+<li><p>不带驱动安装</p>
+</li>
+<li><p>带驱动安装</p>
+<p>以下为不带驱动安装：  </p>
+</li>
+</ul>
+<p><img src="/posts/9882/20190703223712283.png" alt="img">  </p>
+<p>输入accept </p>
+<p>  <img src="/posts/9882/20190703224837983.png" alt="img">  </p>
+<p>不选择Driver</p>
+<p><strong>3. 设置cuda环境变量</strong></p>
+<p>   <code>sudo gedit ~/.bashrc</code></p>
+<p>   在里面添加：</p>
+   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64</span><br><span class="line">export PATH=$PATH:/usr/local/cuda-10.1/bin</span><br><span class="line">export CUDA_HOME=$CUDA_HOME:/usr/local/cuda-10.1</span><br></pre></td></tr></table></figure>
+
+<p>   ==目录要根据实际安装版本而定==</p>
+<p>   <code>source ~/.bashrc</code></p>
+<p><strong>4. 检查是否安装成功</strong></p>
+<p>   <code>nvcc --version</code></p>
+<p>   <img src="/posts/9882/20190703231011626.png" alt="img"></p>
+<hr>
+<h2 id="二、CUDNN"><a href="#二、CUDNN" class="headerlink" title="二、CUDNN"></a>二、CUDNN</h2><ol>
+<li><p>下载cudnn</p>
+<p><a href="https://developer.nvidia.com/rdp/cudnn-archive" target="_blank" rel="noopener">cudnn下载地址</a></p>
+</li>
+<li><p>安装</p>
+<ul>
+<li><p>deb安装</p>
+<p><img src="/posts/9882/20190704003428733.png" alt="img"></p>
+<p>下载如图三个文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo dpkg -i libcudnn7_7.0.3.11-1+cuda9.0_amd64.deb</span><br><span class="line">sudo dpkg -i libcudnn7-dev_7.0.3.11-1+cuda9.0_amd64.deb</span><br><span class="line">sudo dpkg -i libcudnn7-doc_7.0.3.11-1+cuda9.0_amd64.deb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>tgz安装</p>
+<p>解压下载文件</p>
+<p>终端进入解压出来的文件目录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo cp cuda/include/cudnn.h /usr/local/cuda/include/</span><br><span class="line">sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64/</span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn.h</span><br><span class="line">sudo chmod a+r /usr/local/cuda/lib64/libcudnn*</span><br></pre></td></tr></table></figure>
+
+<p>（拷贝库和同文件并给予权限）</p>
+</li>
+</ul>
+</li>
+<li><p>检查安装是否成功</p>
+<p>   <code>cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A 2</code></p>
+</li>
+</ol>
+<hr>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/sss_369/article/details/94591280" target="_blank" rel="noopener">https://blog.csdn.net/sss_369/article/details/94591280</a></p>
+<p><a href="https://blog.csdn.net/sss_369/article/details/94592268" target="_blank" rel="noopener">https://blog.csdn.net/sss_369/article/details/94592268</a></p>
+]]></content>
+      <categories>
+        <category>ubuntu安装</category>
+      </categories>
+      <tags>
+        <tag>安装</tag>
+        <tag>cuda</tag>
       </tags>
   </entry>
   <entry>
